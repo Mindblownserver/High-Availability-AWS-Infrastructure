@@ -47,7 +47,7 @@ resource "aws_security_group" "lb" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # to DoS it and see scaling
+    cidr_blocks = ["0.0.0.0/0"] 
   }
 
   egress {
@@ -117,7 +117,7 @@ resource "aws_autoscaling_policy" "cpu_usage" {
     predefined_metric_specification {
       predefined_metric_type = "ASGAverageCPUUtilization"
     }
-    target_value = 50.0
+    target_value = 70.0 # to test scalability, it was set to 50
   }
 }
 
@@ -133,7 +133,7 @@ resource "aws_launch_template" "launch_templ" {
   key_name      = aws_key_pair.app_key_pair.key_name
 
   user_data = base64encode(templatefile("${path.module}/backend-script-setup.tftpl", {
-    DB_HOST= aws_db_instance.db.endpoint
+    DB_HOST= aws_db_instance.db.address
     DB_USER=var.db_username
     DB_PASSWORD= var.db_passwd
     DB_NAME= var.db_name
@@ -147,8 +147,9 @@ resource "aws_launch_template" "launch_templ" {
   }
 
   network_interfaces {
-    associate_public_ip_address = true
+    associate_public_ip_address = false # was true
     security_groups             = [aws_security_group.backend_sg.id]
+    delete_on_termination = true
   }
 
   lifecycle {

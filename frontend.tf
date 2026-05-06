@@ -27,7 +27,7 @@ resource "aws_security_group" "frontend_sg" {
   description = "Allow the http"
   vpc_id      = aws_vpc.app_vpc.id
 
-  # Config to allow ssh (22) from anywhere
+  # Config to allow ssh (22) from anywhere. Only for debugging
   ingress {
     from_port   = 22
     to_port     = 22

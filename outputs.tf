@@ -20,3 +20,7 @@ output "frontend_ssh" {
   description = "public IP @ of the failed frontend server"
   value = aws_instance.frontend_server.public_ip
 }
+output "db_host" {
+  description = "DB_HOST"
+  value = aws_db_instance.db.address
+}

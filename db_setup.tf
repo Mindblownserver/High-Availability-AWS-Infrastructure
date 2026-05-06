@@ -1,6 +1,6 @@
 resource "aws_db_subnet_group" "db" {
   name = "db-subnet-grp"
-  subnet_ids = [ aws_subnet.private_subnet_a.id, aws_subnet.private_subnet_b.id ]
+  subnet_ids = [ aws_subnet.private_subnet_a.id, aws_subnet.private_subnet_b.id ] # was public subnets
 
   tags = {
     Name= "learn terra"
@@ -14,7 +14,7 @@ resource "aws_security_group" "db" {
     from_port = 3306
     to_port = 3306
     protocol = "tcp"
-    security_groups = [aws_security_group.backend_sg.id]
+    security_groups = [aws_security_group.backend_sg.id] # was cidre_block open to internet
   }
   egress{
     from_port = 0
