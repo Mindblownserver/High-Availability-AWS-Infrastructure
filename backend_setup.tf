@@ -50,12 +50,12 @@ resource "aws_security_group" "lb" {
     cidr_blocks = ["0.0.0.0/0"] # to DoS it and see scaling
   }
 
-  # egress {
-  #   from_port   = 0
-  #   to_port     = 0
-  #   protocol    = "-1"
-  #   cidr_blocks = ["0.0.0.0/0"]
-  # }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
   vpc_id = aws_vpc.app_vpc.id
 
 }
@@ -92,7 +92,7 @@ resource "aws_autoscaling_group" "auto_sc_group" {
     version = "$Latest"
   }
   vpc_zone_identifier = [aws_subnet.private_subnet_a.id, aws_subnet.private_subnet_b.id]
-  #target_group_arns    = [aws_lb_target_group.lb_target_group.arn] # to link target group with auto scaling group
+  target_group_arns    = [aws_lb_target_group.lb_target_group.arn] # to link target group with auto scaling group
 
 
   lifecycle {
