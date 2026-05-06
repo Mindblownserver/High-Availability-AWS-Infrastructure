@@ -1,0 +1,42 @@
+#!/bin/bash -xe
+
+# Update system
+sudo yum update -y
+
+sudo curl -fsSL https://rpm.nodesource.com/setup_20.x | bash -
+sudo yum install -y nodejs
+
+# Install dev tools (needed for some npm packages)
+sudo yum install -y gcc-c++ make git
+
+# Install Nginx
+sudo yum install -y nginx
+
+# Start and enable Nginx
+sudo systemctl start nginx
+sudo systemctl enable nginx
+
+# Remove default nginx files
+sudo rm -rf /usr/share/nginx/html/*
+
+# Clone your GitHub repo
+git clone https://github.com/Mindblownserver/Environment-dependant-Frontend.git ./front
+
+cd ./front
+
+## Make env file
+cat > .env <<'EOF'
+NG_APP_API_URL=http://${backend_lb_url}/api/users
+EOF
+
+## prevent user interaction (y/N)
+export NG_CLI_ANALYTICS=false
+
+## build app
+npm install
+npm run build
+
+# Move built Angular files to nginx directory
+sudo mv ./dist/client/browser/* /usr/share/nginx/html/
+# Reload Nginx
+sudo systemctl restart nginx
