@@ -132,7 +132,12 @@ resource "aws_launch_template" "launch_templ" {
   instance_type = var.instance_type
   key_name      = aws_key_pair.app_key_pair.key_name
 
-  user_data = base64encode(templatefile("${path.module}/backend-script-setup.tftpl", {}))
+  user_data = base64encode(templatefile("${path.module}/backend-script-setup.tftpl", {
+    DB_HOST= aws_db_instance.db.endpoint
+    DB_USER=var.db_username
+    DB_PASSWORD= var.db_passwd
+    DB_NAME= var.db_name
+  }))
   tag_specifications {
     resource_type = "instance"
     tags = {

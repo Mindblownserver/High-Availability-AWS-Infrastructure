@@ -41,6 +41,13 @@ cd /home/ec2-user/app
 # Clone your application (replace with your actual repository URL)
 sudo git clone https://github.com/Mindblownserver/cpu-intensive-nodejs-backend.git .
 
+cat > .env <<'EOF'
+USE_JSON_STORAGE=false
+DB_HOST=${DB_HOST}
+DB_USER=${DB_USER}
+DB_PASSWORD=${DB_PASSWORD}
+DB_NAME=${DB_NAME}
+EOF
 
 # Install application dependencies
 sudo npm install

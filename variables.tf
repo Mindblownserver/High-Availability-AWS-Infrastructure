@@ -36,6 +36,23 @@ variable "ec2_custom_user" {
   default     = "yassine"
 
 }
+
+variable "db_passwd" {
+  description = "RDS root password"
+  type = string
+  sensitive = true # hides the password from output during terraform operation, but it's visible in clear in state file
+}
+
+variable "db_name" {
+  description = "DB NAME"
+  type = string
+  sensitive = true
+}
+variable "db_username" {
+  description = "Username of db"
+  type = string
+  sensitive = true
+}
 # default value is t2.micro if not set.
 # So we can set variables. Here's how:
 # terraform apply -var instance_type=t2.small
